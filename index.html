@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Dashboard</title>
+    
+    <style>
+        /* --- General Setup --- */
+        :root {
+            --color-work: #4a90e2;
+            --color-wellbeing: #50e3c2;
+            --color-learning: #f5a623;
+            --color-bg-light: #f4f7f6;
+            --color-card-bg: #ffffff;
+            --color-text: #333333;
+            --color-text-light: #777777;
+            --color-border: #eeeeee;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--color-bg-light);
+            color: var(--color-text);
+            padding: 20px;
+        }
+
+        /* --- Header & Quote --- */
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+        }
+
+        #quote {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--color-text-light);
+            min-height: 1.2em; /* Prevents layout shift while quote loads */
+        }
+
+        /* --- Main Layout --- */
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Category Cards --- */
+        .category {
+            background-color: var(--color-card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .category h2 {
+            font-size: 1.75rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Color-coding headers */
+        #work h2 { color: var(--color-work); }
+        #wellbeing h2 { color: var(--color-wellbeing); }
+        #learning h2 { color: var(--color-learning); }
+
+        /* --- Progress Bar --- */
+        .progress-bar-container {
+            width: 100%;
+            height: 12px;
+            background-color: var(--color-border);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%; /* Default width */
+            border-radius: 6px;
+            transition: width 0.4s ease-in-out;
+        }
+
+        /* Color-coding progress bars */
+        #work .progress-bar { background-color: var(--color-work); }
+        #wellbeing .progress-bar { background-color: var(--color-wellbeing); }
+        #learning .progress-bar { background-color: var(--color-learning); }
+
+        /* --- Task List --- */
+        .task-list {
+            list-style: none;
+            flex-grow: 1; /* Allows list to fill space */
+            margin-bottom: 20px;
+        }
+
+        .task-list li {
+            display: flex;
+            align-items: center;
+            padding: 12px 5px;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 1rem;
+        }
+
+        .task-list li:last-child {
+            border-bottom: none;
+        }
+
+        .task-list input[type="checkbox"] {
+            margin-right: 12px;
+            /* Enlarge checkbox for easier clicking */
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .task-list label {
+            flex-grow: 1;
+            color: var(--color-text);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        /* Strikethrough for completed tasks */
+        .task-list input[type="checkbox"]:checked + label {
+            text-decoration: line-through;
+            color: var(--color-text-light);
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: var(--color-text-light);
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 5px;
+            opacity: 0.5;
+            transition: opacity 0.2s, color 0.2s;
+        }
+
+        .task-list li:hover .delete-btn {
+            opacity: 1;
+        }
+
+        .delete-btn:hover {
+            color: #d9534f; /* Red on hover */
+        }
+
+        /* --- Add Task Input --- */
+        .add-task {
+            display: flex;
+            margin-top: auto; /* Pushes to the bottom of the card */
+        }
+
+        .add-task input[type="text"] {
+            flex-grow: 1;
+            border: 1px solid var(--color-border);
+            padding: 10px 12px;
+            font-size: 0.95rem;
+            border-radius: 6px 0 0 6px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .add-task input[type="text"]:focus {
+            border-color: var(--color-work); /* Default focus color */
+        }
+
+        /* Color-coding input focus */
+        #work .add-task input[type="text"]:focus { border-color: var(--color-work); }
+        #wellbeing .add-task input[type="text"]:focus { border-color: var(--color-wellbeing); }
+        #learning .add-task input[type="text"]:focus { border-color: var(--color-learning); }
+
+        .add-task button {
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 0 18px;
+            border-radius: 0 6px 6px 0;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .add-task button:hover {
+            opacity: 0.85;
+        }
+
+        /* Color-coding add buttons */
+        #work .add-task button { background-color: var(--color-work); }
+        #wellbeing .add-task button { background-color: var(--color-wellbeing); }
+        #learning .add-task button { background-color: var(--color-learning); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>My Daily Dashboard</h1>
+        <p id="quote">Loading motivational quote...</p>
+    </header>
+
+    <main class="content">
+        <section class="category" id="work">
+            <h2>💼 Work</h2>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="work-progress"></div>
+            </div>
+            <ul class="task-list" id="work-tasks">
+                </ul>
+            <div class="add-task">
+                <input type="text" id="work-input" placeholder="New work task...">
+                <button data-category="work" aria-label="Add work task">+</button>
+            </div>
+        </section>
+
+        <section class="category" id="wellbeing">
+            <h2>🧘 Wellbeing</h2>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="wellbeing-progress"></div>
+            </div>
+            <ul class="task-list" id="wellbeing-tasks">
+                </ul>
+            <div class="add-task">
+                <input type="text" id="wellbeing-input" placeholder="New wellbeing goal...">
+                <button data-category="wellbeing" aria-label="Add wellbeing task">+</button>
+            </div>
+        </section>
+
+        <section class="category" id="learning">
+            <h2>📚 Learning</h2>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="learning-progress"></div>
+            </div>
+            <ul class="task-list" id="learning-tasks">
+                </ul>
+            <div class="add-task">
+                <input type="text" id="learning-input" placeholder="New learning objective...">
+                <button data-category="learning" aria-label="Add learning task">+</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- STATE MANAGEMENT ---
+            // Load tasks from localStorage or initialize as empty
+            let tasks = JSON.parse(localStorage.getItem('dashboardTasks')) || {
+                work: [],
+                wellbeing: [],
+                learning: []
+            };
+
+            // --- SELECTORS ---
+            const quoteEl = document.getElementById('quote');
+            const taskLists = {
+                work: document.getElementById('work-tasks'),
+                wellbeing: document.getElementById('wellbeing-tasks'),
+                learning: document.getElementById('learning-tasks')
+            };
+            const inputs = {
+                work: document.getElementById('work-input'),
+                wellbeing: document.getElementById('wellbeing-input'),
+                learning: document.getElementById('learning-input')
+            };
+            const progressBars = {
+                work: document.getElementById('work-progress'),
+                wellbeing: document.getElementById('wellbeing-progress'),
+                learning: document.getElementById('learning-progress')
+            };
+            const addButtons = document.querySelectorAll('.add-task button');
+            const allTaskLists = document.querySelectorAll('.task-list');
+
+            // --- QUOTE FUNCTION ---
+            const quotes = [
+                "The secret of getting ahead is getting started.",
+                "Your future is created by what you do today, not tomorrow.",
+                "Well done is better than well said.",
+                "Discipline is the bridge between goals and accomplishment.",
+                "The only way to do great work is to love what you do.",
+                "Don't watch the clock; do what it does. Keep going.",
+                "Success is the sum of small efforts, repeated day in and day out.",
+                "A little progress each day adds up to big results."
+            ];
+
+            function loadQuote() {
+                const today = new Date().toDateString();
+                const cached = JSON.parse(localStorage.getItem('dailyQuote'));
+
+                if (cached && cached.date === today) {
+                    quoteEl.textContent = `"${cached.quote}"`;
+                } else {
+                    const randomIndex = Math.floor(Math.random() * quotes.length);
+                    const newQuote = quotes[randomIndex];
+                    localStorage.setItem('dailyQuote', JSON.stringify({ quote: newQuote, date: today }));
+                    quoteEl.textContent = `"${newQuote}"`;
+                }
+            }
+
+            // --- CORE FUNCTIONS ---
+            function saveTasks() {
+                localStorage.setItem('dashboardTasks', JSON.stringify(tasks));
+            }
+
+            function renderTasks() {
+                // Loop over each category (work, wellbeing, learning)
+                for (const category in tasks) {
+                    const taskListEl = taskLists[category];
+                    taskListEl.innerHTML = ''; // Clear existing list
+
+                    if (tasks[category].length === 0) {
+                        taskListEl.innerHTML = '<li style="color: #999; justify-content: center; border: none;">No tasks yet.</li>';
+                    } else {
+                        tasks[category].forEach(task => {
+                            const li = document.createElement('li');
+                            const checkboxId = `task-${task.id}`;
+
+                            li.innerHTML = `
+                                <input type="checkbox" id="${checkboxId}" data-id="${task.id}" data-category="${category}" ${task.completed ? 'checked' : ''}>
+                                <label for="${checkboxId}">${task.text}</label>
+                                <button class="delete-btn" data-id="${task.id}" data-category="${category}" aria-label="Delete task">&times;</button>
+                            `;
+                            taskListEl.appendChild(li);
+                        });
+                    }
+                    // Update progress bar after rendering
+                    updateProgress(category);
+                }
+            }
+
+            function addTask(category, text) {
+                if (text === '') return; // Don't add empty tasks
+
+                const task = {
+                    id: Date.now(),
+                    text: text,
+                    completed: false
+                };
+
+                tasks[category].push(task);
+                saveTasks();
+                renderTasks();
+                inputs[category].value = ''; // Clear input field
+            }
+
+            function toggleTask(category, id) {
+                const task = tasks[category].find(t => t.id == id);
+                if (task) {
+                    task.completed = !task.completed;
+                    saveTasks();
+                    renderTasks(); // Re-render to update strikethrough and progress
+                }
+            }
+
+            function deleteTask(category, id) {
+                // Filter out the task with the matching id
+                tasks[category] = tasks[category].filter(t => t.id != id);
+                saveTasks();
+                renderTasks();
+            }
+
+            function updateProgress(category) {
+                const categoryTasks = tasks[category];
+                const totalTasks = categoryTasks.length;
+
+                if (totalTasks === 0) {
+                    progressBars[category].style.width = '0%';
+                    return;
+                }
+
+                const completedTasks = categoryTasks.filter(t => t.completed).length;
+                const percentage = (completedTasks / totalTasks) * 100;
+                
+                progressBars[category].style.width = `${percentage}%`;
+            }
+
+            // --- EVENT LISTENERS ---
+
+            // 1. Add Task Buttons
+            addButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const category = button.dataset.category;
+                    const text = inputs[category].value.trim();
+                    addTask(category, text);
+                });
+            });
+
+            // 2. Add Task on 'Enter' keypress
+            for (const category in inputs) {
+                inputs[category].addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        const text = inputs[category].value.trim();
+                        addTask(category, text);
+                    }
+                });
+            }
+
+            // 3. Click handling for Checkboxes and Delete Buttons (Event Delegation)
+            allTaskLists.forEach(list => {
+                list.addEventListener('click', (e) => {
+                    const target = e.target;
+                    const category = target.dataset.category;
+                    const id = target.dataset.id;
+
+                    if (!category || !id) return; // Exit if not a target element
+
+                    if (target.type === 'checkbox') {
+                        toggleTask(category, id);
+                    }
+
+                    if (target.classList.contains('delete-btn')) {
+                        deleteTask(category, id);
+                    }
+                });
+            });
+
+            // --- INITIAL LOAD ---
+            loadQuote();
+            renderTasks();
+
+        });
+    </script>
+
+</body>
+</html>
