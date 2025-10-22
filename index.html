@@ -8,15 +8,24 @@
     <style>
         /* --- General Setup --- */
         :root {
-            --color-work: #4a90e2;
-            --color-wellbeing: #50e3c2;
-            --color-learning: #f5a623;
-            --color-bg-light: #f4f7f6;
+            --color-work: #6366f1;
+            --color-work-light: #818cf8;
+            --color-work-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --color-wellbeing: #10b981;
+            --color-wellbeing-light: #34d399;
+            --color-wellbeing-gradient: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+            --color-learning: #f59e0b;
+            --color-learning-light: #fbbf24;
+            --color-learning-gradient: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+            --color-bg-light: #f8fafc;
             --color-card-bg: #ffffff;
-            --color-text: #333333;
-            --color-text-light: #777777;
-            --color-border: #eeeeee;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --color-text: #1e293b;
+            --color-text-light: #64748b;
+            --color-border: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
         }
 
         * {
@@ -26,189 +35,389 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--color-bg-light);
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
             color: var(--color-text);
-            padding: 20px;
+            padding: 30px 20px;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.3), transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body > * {
+            position: relative;
+            z-index: 1;
         }
 
         /* --- Header & Quote --- */
         header {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--color-text);
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            color: white;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+            letter-spacing: -0.5px;
         }
 
         #quote {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-style: italic;
-            color: var(--color-text-light);
-            min-height: 1.2em; /* Prevents layout shift while quote loads */
+            color: rgba(255, 255, 255, 0.95);
+            min-height: 1.2em;
+            max-width: 600px;
+            margin: 0 auto;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+            font-weight: 400;
         }
 
         /* --- Main Layout --- */
         .content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            max-width: 1200px;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 30px;
+            max-width: 1300px;
             margin: 0 auto;
         }
 
         /* --- Category Cards --- */
         .category {
-            background-color: var(--color-card-bg);
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            padding: 25px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            padding: 30px;
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .category:nth-child(1) { animation-delay: 0.1s; }
+        .category:nth-child(2) { animation-delay: 0.2s; }
+        .category:nth-child(3) { animation-delay: 0.3s; }
+
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl), 0 0 0 1px rgba(99, 102, 241, 0.1);
         }
 
         .category h2 {
-            font-size: 1.75rem;
-            margin-bottom: 15px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            letter-spacing: -0.3px;
         }
 
-        /* Color-coding headers */
-        #work h2 { color: var(--color-work); }
-        #wellbeing h2 { color: var(--color-wellbeing); }
-        #learning h2 { color: var(--color-learning); }
+        /* Color-coding headers with gradients */
+        #work h2 { 
+            background: var(--color-work-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        #wellbeing h2 { 
+            background: var(--color-wellbeing-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        #learning h2 { 
+            background: var(--color-learning-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
         /* --- Progress Bar --- */
         .progress-bar-container {
             width: 100%;
-            height: 12px;
+            height: 8px;
             background-color: var(--color-border);
-            border-radius: 6px;
+            border-radius: 10px;
             overflow: hidden;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .progress-bar-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .progress-bar {
             height: 100%;
-            width: 0%; /* Default width */
-            border-radius: 6px;
-            transition: width 0.4s ease-in-out;
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Color-coding progress bars */
-        #work .progress-bar { background-color: var(--color-work); }
-        #wellbeing .progress-bar { background-color: var(--color-wellbeing); }
-        #learning .progress-bar { background-color: var(--color-learning); }
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                rgba(255, 255, 255, 0) 0%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                rgba(255, 255, 255, 0) 100%);
+        }
+
+        /* Color-coding progress bars with gradients */
+        #work .progress-bar { background: var(--color-work-gradient); }
+        #wellbeing .progress-bar { background: var(--color-wellbeing-gradient); }
+        #learning .progress-bar { background: var(--color-learning-gradient); }
 
         /* --- Task List --- */
         .task-list {
             list-style: none;
-            flex-grow: 1; /* Allows list to fill space */
-            margin-bottom: 20px;
+            flex-grow: 1;
+            margin-bottom: 25px;
         }
 
         .task-list li {
             display: flex;
             align-items: center;
-            padding: 12px 5px;
+            padding: 14px 10px;
             border-bottom: 1px solid var(--color-border);
-            font-size: 1rem;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            margin-bottom: 4px;
         }
 
         .task-list li:last-child {
             border-bottom: none;
         }
 
-        .task-list input[type="checkbox"] {
-            margin-right: 12px;
-            /* Enlarge checkbox for easier clicking */
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
+        .task-list li:hover {
+            background-color: #f8fafc;
+            padding-left: 14px;
         }
+
+        .task-list input[type="checkbox"] {
+            margin-right: 14px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--color-work);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        #work .task-list input[type="checkbox"] { accent-color: var(--color-work); }
+        #wellbeing .task-list input[type="checkbox"] { accent-color: var(--color-wellbeing); }
+        #learning .task-list input[type="checkbox"] { accent-color: var(--color-learning); }
 
         .task-list label {
             flex-grow: 1;
             color: var(--color-text);
             cursor: pointer;
-            transition: color 0.2s;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
 
         /* Strikethrough for completed tasks */
         .task-list input[type="checkbox"]:checked + label {
             text-decoration: line-through;
             color: var(--color-text-light);
+            opacity: 0.6;
         }
 
         .delete-btn {
             background: none;
             border: none;
             color: var(--color-text-light);
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-weight: bold;
             cursor: pointer;
-            padding: 5px;
-            opacity: 0.5;
-            transition: opacity 0.2s, color 0.2s;
+            padding: 5px 8px;
+            opacity: 0;
+            transition: all 0.2s ease;
+            border-radius: 6px;
         }
 
         .task-list li:hover .delete-btn {
-            opacity: 1;
+            opacity: 0.6;
         }
 
         .delete-btn:hover {
-            color: #d9534f; /* Red on hover */
+            opacity: 1 !important;
+            background-color: #fee2e2;
+            color: #dc2626;
+            transform: scale(1.1);
         }
 
         /* --- Add Task Input --- */
         .add-task {
             display: flex;
-            margin-top: auto; /* Pushes to the bottom of the card */
+            margin-top: auto;
+            gap: 0;
+            box-shadow: var(--shadow-sm);
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .add-task input[type="text"] {
             flex-grow: 1;
-            border: 1px solid var(--color-border);
-            padding: 10px 12px;
+            border: 2px solid var(--color-border);
+            padding: 12px 16px;
             font-size: 0.95rem;
-            border-radius: 6px 0 0 6px;
+            border-radius: 12px 0 0 12px;
             outline: none;
-            transition: border-color 0.2s;
+            transition: all 0.3s ease;
+            background-color: #f8fafc;
+            font-weight: 500;
         }
 
         .add-task input[type="text"]:focus {
-            border-color: var(--color-work); /* Default focus color */
+            background-color: white;
+            border-color: var(--color-work);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
         /* Color-coding input focus */
-        #work .add-task input[type="text"]:focus { border-color: var(--color-work); }
-        #wellbeing .add-task input[type="text"]:focus { border-color: var(--color-wellbeing); }
-        #learning .add-task input[type="text"]:focus { border-color: var(--color-learning); }
+        #work .add-task input[type="text"]:focus { 
+            border-color: var(--color-work); 
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        #wellbeing .add-task input[type="text"]:focus { 
+            border-color: var(--color-wellbeing); 
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+        #learning .add-task input[type="text"]:focus { 
+            border-color: var(--color-learning);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
 
         .add-task button {
             border: none;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             font-weight: bold;
-            padding: 0 18px;
-            border-radius: 0 6px 6px 0;
+            padding: 0 22px;
+            border-radius: 0 12px 12px 0;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .add-task button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .add-task button:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .add-task button:hover {
-            opacity: 0.85;
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
         }
 
-        /* Color-coding add buttons */
-        #work .add-task button { background-color: var(--color-work); }
-        #wellbeing .add-task button { background-color: var(--color-wellbeing); }
-        #learning .add-task button { background-color: var(--color-learning); }
+        .add-task button:active {
+            transform: scale(0.98);
+        }
+
+        /* Color-coding add buttons with gradients */
+        #work .add-task button { background: var(--color-work-gradient); }
+        #wellbeing .add-task button { background: var(--color-wellbeing-gradient); }
+        #learning .add-task button { background: var(--color-learning-gradient); }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.25rem;
+            }
+            
+            #quote {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+            
+            .content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .category {
+                padding: 25px 20px;
+            }
+        }
     </style>
 </head>
 <body>
