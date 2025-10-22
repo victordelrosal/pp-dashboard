@@ -285,6 +285,151 @@
             color: var(--color-text-light);
             line-height: 1.5;
         }
+
+        .stretching-exercise {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(168, 85, 247, 0.12));
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+
+        .stretching-exercise h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #8b5cf6;
+        }
+
+        .stretch-display {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .stretch-illustration {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 12px;
+            border-radius: 16px;
+            background: rgba(139, 92, 246, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2);
+        }
+
+        .stretch-illustration.active {
+            transform: scale(1.05);
+            background: rgba(139, 92, 246, 0.25);
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.35);
+        }
+
+        .stretch-name {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .stretch-timer {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #8b5cf6;
+            margin-bottom: 8px;
+        }
+
+        .stretch-description {
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+            line-height: 1.4;
+            max-width: 280px;
+            margin: 0 auto 16px;
+        }
+
+        .stretch-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stretch-controls button {
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .stretch-controls button:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+            box-shadow: none;
+        }
+
+        #stretch-start {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            color: white;
+            box-shadow: 0 12px 30px rgba(139, 92, 246, 0.35);
+        }
+
+        #stretch-start:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.45);
+        }
+
+        #stretch-stop {
+            background: rgba(148, 163, 184, 0.15);
+            color: var(--color-text);
+            box-shadow: 0 5px 20px rgba(148, 163, 184, 0.25);
+        }
+
+        #stretch-stop:not(:disabled):hover {
+            transform: translateY(-2px);
+            background: rgba(148, 163, 184, 0.25);
+        }
+
+        #stretch-skip {
+            background: rgba(139, 92, 246, 0.15);
+            color: #8b5cf6;
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.2);
+        }
+
+        #stretch-skip:not(:disabled):hover {
+            transform: translateY(-2px);
+            background: rgba(139, 92, 246, 0.25);
+        }
+
+        .stretch-progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .stretch-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stretch-dot.completed {
+            background: #8b5cf6;
+            transform: scale(1.2);
+        }
+
+        .stretch-dot.active {
+            background: #8b5cf6;
+            transform: scale(1.4);
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+        }
+
         #learning h2 { 
             background: var(--color-learning-gradient);
             -webkit-background-clip: text;
@@ -581,6 +726,28 @@
                 </div>
                 <p class="breathing-instructions">Follow the prompts to inhale for 4 counts, hold for 7, and exhale for 8. Repeat a few cycles to calm your mind.</p>
             </div>
+            <div class="stretching-exercise" aria-labelledby="stretching-title">
+                <h3 id="stretching-title">Quick Flexibility Routine</h3>
+                <div class="stretch-display">
+                    <div class="stretch-illustration" id="stretch-illustration" role="img" aria-label="Stretch illustration">
+                        <span id="stretch-emoji">🧘</span>
+                    </div>
+                    <div class="stretch-name" id="stretch-name">Ready to stretch</div>
+                    <div class="stretch-timer" id="stretch-timer">0:30</div>
+                    <div class="stretch-description" id="stretch-description">Click start to begin your stretching routine</div>
+                </div>
+                <div class="stretch-controls">
+                    <button id="stretch-start">Start</button>
+                    <button id="stretch-skip" disabled>Skip</button>
+                    <button id="stretch-stop" disabled>Reset</button>
+                </div>
+                <div class="stretch-progress-dots" id="stretch-progress">
+                    <div class="stretch-dot"></div>
+                    <div class="stretch-dot"></div>
+                    <div class="stretch-dot"></div>
+                    <div class="stretch-dot"></div>
+                </div>
+            </div>
         </section>
 
         <section class="category" id="learning">
@@ -844,6 +1011,163 @@
                 document.addEventListener('visibilitychange', () => {
                     if (document.hidden && breathingRunning) {
                         stopBreathing();
+                    }
+                });
+            }
+
+            // --- STRETCHING EXERCISE ---
+            const stretchStartBtn = document.getElementById('stretch-start');
+            const stretchSkipBtn = document.getElementById('stretch-skip');
+            const stretchStopBtn = document.getElementById('stretch-stop');
+            const stretchName = document.getElementById('stretch-name');
+            const stretchTimer = document.getElementById('stretch-timer');
+            const stretchDescription = document.getElementById('stretch-description');
+            const stretchEmoji = document.getElementById('stretch-emoji');
+            const stretchIllustration = document.getElementById('stretch-illustration');
+            const stretchProgress = document.getElementById('stretch-progress');
+
+            if (stretchStartBtn && stretchStopBtn && stretchSkipBtn) {
+                const stretches = [
+                    {
+                        name: 'Neck Rolls',
+                        emoji: '🔄',
+                        description: 'Gently roll your head in circles. 5 times each direction.',
+                        duration: 30
+                    },
+                    {
+                        name: 'Shoulder Shrugs',
+                        emoji: '💪',
+                        description: 'Lift shoulders up to ears, hold, then release. Repeat slowly.',
+                        duration: 30
+                    },
+                    {
+                        name: 'Seated Twist',
+                        emoji: '🌀',
+                        description: 'Sit tall, twist torso left and right. Hold each side gently.',
+                        duration: 30
+                    },
+                    {
+                        name: 'Wrist & Finger Stretches',
+                        emoji: '👐',
+                        description: 'Extend arms, flex wrists up and down. Spread and close fingers.',
+                        duration: 30
+                    }
+                ];
+
+                let currentStretchIndex = 0;
+                let stretchInterval;
+                let stretchCountdown;
+                let stretchRunning = false;
+
+                function updateStretchProgress() {
+                    const dots = stretchProgress.querySelectorAll('.stretch-dot');
+                    dots.forEach((dot, index) => {
+                        dot.classList.remove('active', 'completed');
+                        if (index < currentStretchIndex) {
+                            dot.classList.add('completed');
+                        } else if (index === currentStretchIndex && stretchRunning) {
+                            dot.classList.add('active');
+                        }
+                    });
+                }
+
+                function formatTime(seconds) {
+                    const mins = Math.floor(seconds / 60);
+                    const secs = seconds % 60;
+                    return `${mins}:${secs.toString().padStart(2, '0')}`;
+                }
+
+                function startStretch(index) {
+                    if (index >= stretches.length) {
+                        completeStretchingRoutine();
+                        return;
+                    }
+
+                    currentStretchIndex = index;
+                    const stretch = stretches[index];
+                    let timeRemaining = stretch.duration;
+
+                    stretchName.textContent = stretch.name;
+                    stretchEmoji.textContent = stretch.emoji;
+                    stretchDescription.textContent = stretch.description;
+                    stretchTimer.textContent = formatTime(timeRemaining);
+                    stretchIllustration.classList.add('active');
+
+                    updateStretchProgress();
+
+                    stretchCountdown = setInterval(() => {
+                        timeRemaining--;
+                        stretchTimer.textContent = formatTime(timeRemaining);
+
+                        if (timeRemaining <= 0) {
+                            clearInterval(stretchCountdown);
+                            stretchIllustration.classList.remove('active');
+                            setTimeout(() => {
+                                startStretch(index + 1);
+                            }, 1000);
+                        }
+                    }, 1000);
+                }
+
+                function completeStretchingRoutine() {
+                    stretchRunning = false;
+                    stretchName.textContent = 'Great job!';
+                    stretchEmoji.textContent = '✨';
+                    stretchDescription.textContent = 'You completed the stretching routine. Your body thanks you!';
+                    stretchTimer.textContent = '0:00';
+                    stretchIllustration.classList.remove('active');
+
+                    updateStretchProgress();
+
+                    stretchStartBtn.disabled = false;
+                    stretchSkipBtn.disabled = true;
+                    stretchStopBtn.disabled = true;
+
+                    setTimeout(() => {
+                        resetStretching();
+                    }, 3000);
+                }
+
+                function resetStretching() {
+                    clearInterval(stretchCountdown);
+                    stretchRunning = false;
+                    currentStretchIndex = 0;
+
+                    stretchName.textContent = 'Ready to stretch';
+                    stretchEmoji.textContent = '🧘';
+                    stretchDescription.textContent = 'Click start to begin your stretching routine';
+                    stretchTimer.textContent = '0:30';
+                    stretchIllustration.classList.remove('active');
+
+                    updateStretchProgress();
+
+                    stretchStartBtn.disabled = false;
+                    stretchSkipBtn.disabled = true;
+                    stretchStopBtn.disabled = true;
+                }
+
+                function skipStretch() {
+                    clearInterval(stretchCountdown);
+                    stretchIllustration.classList.remove('active');
+                    startStretch(currentStretchIndex + 1);
+                }
+
+                stretchStartBtn.addEventListener('click', () => {
+                    if (stretchRunning) return;
+                    stretchRunning = true;
+                    stretchStartBtn.disabled = true;
+                    stretchSkipBtn.disabled = false;
+                    stretchStopBtn.disabled = false;
+                    currentStretchIndex = 0;
+                    startStretch(0);
+                });
+
+                stretchSkipBtn.addEventListener('click', skipStretch);
+                stretchStopBtn.addEventListener('click', resetStretching);
+
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden && stretchRunning) {
+                        resetStretching();
                     }
                 });
             }
